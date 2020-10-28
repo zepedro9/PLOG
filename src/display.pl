@@ -12,18 +12,64 @@ initial([
 	[white, black, white, black, white, black, white, black, white, black]
 ]).
 
-position(black, P) :- P='| B '.
-position(white, P) :- P='| W '.
+intermediate([
+	[black, white, black, white, black, white, black, white, black, white],
+	[white, black, white, white, white, black, black, black, black, black],
+	[black, black, black, black, white, white, white, black, black, white],
+	[white, black, black, white, white, black, white, white, black, white],
+	[black, black, white, black, white, black, white, white, white, white],
+	[white, black, white, black, white, white, white, black, white, white],
+	[black, white, white, black, black, black, black, black, black, white],
+	[white, white, black, black, black, black, black, black, black, black],
+	[white, black, white, white, white, white, black, black, black, black],
+	[black, black, white, white, black, white, black, white, black, black]
+]).
 
-display_game(Initial, P1) :-
+final([
+	[black, black, white, white, white, black, black, white, white, black],
+	[black, black, white, white, white, black, black, black, black, black],
+	[white, black, black, black, white, white, white, black, black, black],
+	[white, black, black, black, white, white, white, white, white, white],
+	[white, black, white, white, white, white, white, white, white, white],
+	[black, black, white, white, white, white, black, black, white, white],
+	[black, black, black, black, black, black, black, black, black, white],
+	[white, black, black, black, black, black, black, black, black, black],
+	[white, white, white, black, black, black, black, black, black, black],
+	[black, black, white, white, white, white, white, white, black, black]
+]).
+
+position(black, P) :- P='| B '.
+position(white, P) :- P='|   '.
+
+display_game(Initial, P) :-
 	clear_screen,
-	write('-=x=-=x=-=x=-=x=-=x=-=x=-=x=- Emulsion -=x=-=x=-=x=-=x=-=x=-=x=-=x=-\n'),
-	nl,
+	write('-=x=-=x=-=x=-=x=-=x=-=x=-=x=- Emulsion -=x=-=x=-=x=-=x=-=x=-=x=-=x=-'),
+	nl,nl,nl,
 	write('    | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |'),
 	nl,
-	print_board(Initial, 0).
+	print_board(Initial, 0),
+	print_next_move_request(P).
+	%print_win_message(P, '55 to 45').
+	
+print_next_move_request(P) :-
+	nl,nl,
+	write('E a vez do '),
+	write(P),
+	write('!'),
+	nl,
+	write('Choose your next move: ').
 
-print_board([], 9) :-
+print_win_message(P, Res) :-
+	nl,nl,
+	write('O '),
+	write(P),
+	write(' ganhou!'),
+	nl,
+	write('Resultado final: '),
+	write(Res),
+	write('.').
+
+print_board([], 10) :-
 	write('     _______________________________________ ').
 print_board([FirstLine|Rest], N) :-
 	write('     _______________________________________ '),

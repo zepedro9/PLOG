@@ -7,5 +7,5 @@ play :-
 	
 start_game :-
 	initial(Initial),
-	create_player(P1),
+	get_player(P1, 1),
 	display_game(Initial, P1).
