@@ -2,6 +2,7 @@
 
 ## Integrantes:
 Carolina Rosemback Guilhermino - up201800171@fe.up.pt
+
 José Pedro Nogueira Rodrigues - up201708806@fe.up.pt
 
 ## Descrição do Jogo:
