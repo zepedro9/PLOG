@@ -157,7 +157,7 @@ O tamanho do tabuleiro, segundo o jogo original, pode ser de qualquer tamanho. P
   Este é um estado intermédio do jogo, em que já foram executados vários movimentos das peças por ambos os jogadores.
   
 - **Final**: 
-  Este é um estado final do jogo, em que não existem mais movimentos legais, pelo que o jogo de **Emulsão** está terminado, ganho pelas peças pretas (55 vs 45).
+  Este é um estado final do jogo, em que não existem mais movimentos legais, pelo que o jogo de **Emulsion** está terminado, ganho pelas peças pretas (55 vs 45).
 
 |    Initial    |  Intermediate  |     Final     |
 |:-------------:|:--------------:|:-------------:|
