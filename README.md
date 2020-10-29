@@ -10,7 +10,7 @@ Emulsion é um jogo de território finito para 2 jogadores: Preto e Branco. O ob
 Um grupo é formado por peças da mesma cor ortogonalmente adjacentes.
 
 ## Regras do Jogo:
-As peças pretas pretas começam primeiro, depois os turnos vão se alternando. Em cada ronda, deve-se trocar as posições de duas peças de diferentes cores, ortogonalmente ou na diagonal, para que o valor da sua peça no par aumente.
+As peças pretas começam primeiro, depois os turnos vão se alternando. Em cada ronda, deve-se trocar as posições de duas peças de diferentes cores, ortogonalmente ou na diagonal, para que o valor da sua peça no par aumente.
 
 O valor de uma peça é dado pelo número de peças da mesma cor, ortogonalmente adjacentes a ela, mais metade do número de arestas do tabuleiro adjacentes à peça.
 
