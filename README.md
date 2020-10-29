@@ -23,8 +23,8 @@ O tamanho do tabuleiro, segundo o jogo original, pode ser de qualquer tamanho. P
   + Contacto com o autor do jogo
     <details>
     <summary>Conversa:</summary>
-    ![Message 1](/images/msg1.png)
-    ![Message 2](/images/msg2.png)
+    <img src="/images/msg1.png" alt="Message 1">
+    <img src="/images/msg2.png" alt="Message 2">
   </details>
 
 ## Representação Interna:
