@@ -23,8 +23,8 @@ O tamanho do tabuleiro, segundo o jogo original, pode ser de qualquer tamanho. P
   + Contacto com o autor do jogo
     <details>
     <summary>Conversa:</summary>
-    <img src="/images/msg1.png" alt="Message 1">
-    <img src="/images/msg2.png" alt="Message 2">
+    <img src="/TP1Intermediate/images/msg1.png" alt="Message 1">
+    <img src="/TP1Intermediate/images/msg2.png" alt="Message 2">
   </details>
 
 ## Representação Interna:
@@ -161,4 +161,4 @@ O tamanho do tabuleiro, segundo o jogo original, pode ser de qualquer tamanho. P
 
 |    Initial    |  Intermediate  |     Final     |
 |:-------------:|:--------------:|:-------------:|
-|![Initial Image](/images/initial.png)|![Intermediate Image](/images/intermediate.png)|![Final Image](/images/final.png)|
+|![Initial Image](/TP1Intermediate/images/initial.png)|![Intermediate Image](/TP1Intermediate/images/intermediate.png)|![Final Image](/TP1Intermediate/images/final.png)|
