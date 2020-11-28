@@ -5,15 +5,15 @@ mainMenu :-
     menuOption(Input).
 
 menuOption(1) :-
-    startGame(1, 1),
+    startGame(1, 2),
     mainMenu.
 
 menuOption(2) :-
-    startGame(1, 0),
+    startGame(1, -2),
     mainMenu.
 
 menuOption(3) :-
-    startGame(0, 0),
+    startGame(-1, -2),
     mainMenu.
 
 menuOption(0) :-
