@@ -17,7 +17,7 @@ changeTurn([H|T]):-
 
 %doRound(+GameState)
 doRound(GameState):-
-	%condição de paragem 
+	%condição de paragem
 	game_over(GameState, Winner).
 
 %doRound(+GameState)
@@ -38,7 +38,7 @@ move(GameState, Move, NewGameState).
  
 %TODO criar caso de desempate
 %check for the winner
-check_winner(GameState, Winner):-
+checkWinner(GameState, Winner):-
 	value(GameState, Player1, Val1),
 	value(GameState, Player2, Val2),
 		Val1 @< Val2,
