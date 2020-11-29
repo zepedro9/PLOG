@@ -48,5 +48,5 @@ validatePieceSelect([2|Board], ValidatedRow, ValidatedColumn, PieceRow, PieceCol
 	getHumanPieceSelect([2|Board], PieceRow, PieceColumn).
 
 %getHumanPieceMove(+Player, +PieceRow, +PieceColumn, +ListOfMoves, -NewPieceRow, -NewPieceColumn)
-%getHumanPieceMove(Player, PieceRow, PieceColumn, [Move|Moves], NewPieceRow, NewPieceColumn) :-
+getHumanPieceMove(Player, PieceRow, PieceColumn, [Move|Moves], NewPieceRow, NewPieceColumn).
 	

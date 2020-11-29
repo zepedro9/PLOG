@@ -1,17 +1,17 @@
 %startGame(+Player1, +Player2)
-startGame(Player1, Player2) :-
+startGame :-
 	initial(InitialBoard),
-	gameState(Player1, InitialBoard, GameState),
+	gameState(1, InitialBoard, GameState),
 	doRound(GameState).
 
 next_turn('Player1', 'Player2').
 next_turn('Player2', 'Player1').
 
-changeTurn([H|T]):-
+%changeTurn(+GameState)
+changeTurn([H|T]) :-
 	next_turn(H, NewPlayer),
 	GameState = [NewPlayer|T],
 	gameState(NewPlayer, T, GameState).
-
 
 %doRound(+GameState)
 doRound(GameState):-
@@ -27,7 +27,26 @@ doRound(GameState):-
 	doRound(GameState).
 	
 %valid_moves(+GameState, +Player, -ListOfMoves)
-%valid_moves(GameState, Player, ListOfMoves).
+valid_moves([_|Board], Player, ListOfMoves) :-
+	positionsList(ListOfPositions),
+	getPieceType(Player, PieceType),
+	valid_movesAux(Board, 9, ListOfPositions, PieceType, [], ListOfMoves).
+
+valid_movesAux([], [], 0, PlaceHolderList, ListOfMoves) :-
+	ListOfMoves = PlaceHolderList.
+valid_movesAux([[CurrentPiece|_]|RestOfRows], 0, [[PositionRow|[PositionColumn|_]]|TailListOfPositions], PieceType, PlaceHolderList, ListOfMoves) :-
+	CurrentPiece == PieceType,
+	append([PositionRow, PositionColumn], PlaceHolderList, Aux),
+	valid_movesAux(RestOfRows, Counter, TailListOfPositions, PieceType, Aux, ListOfMoves);
+	valid_movesAux(RestOfRows, Counter, TailListOfPositions, PieceType, PlaceHolderList, ListOfMoves).
+valid_movesAux([[CurrentPiece|RestOfColumns]|RestOfRows], BoardCounter, [[PositionRow|[PositionColumn|_]]|TailListOfPositions], PieceType, PlaceHolderList, ListOfMoves) :-
+	CurrentPiece == PieceType,
+	Counter is BoardCounter - 1,
+	append([PositionRow, PositionColumn], PlaceHolderList, Aux),
+	valid_movesAux([RestOfColumns|RestOfRows], Counter, TailListOfPositions, PieceType, Aux, ListOfMoves);
+	Counter is BoardCounter - 1,
+	valid_movesAux([RestOfColumns|RestOfRows], Counter, TailListOfPositions, PieceType, PlaceHolderList, ListOfMoves).
+	
 
 %move(+GameState, +Move, -NewGameState)​
 %move(GameState, Move, NewGameState).
@@ -38,10 +57,15 @@ doRound(GameState):-
 checkWinner(GameState, Winner):-
 	value(GameState, 1, Val1),
 	value(GameState, 2, Val2),
-		Val1 @< Val2,
-		Winner = 'Player1';
-        Val2 @< Val1,
-		Winner = 'Player2'.
+	getWinner(Val1, Val2, Winner).
+	
+getWinner(Val1, Val2, Winner) :-
+	Val1 < Val2,
+	Winner = 'Player1';
+	Val1 > Val2,
+	Winner = 'Player2';
+	Val2 == Val1,
+	Winner = 'Tie'.
 
 %game_over(+GameState, -Winner)
 game_over(GameState, Winner):-
@@ -55,6 +79,11 @@ value([_|Board], Player, Value) :-
 	getPieceType(Player, PieceType),
 	getLargestGroup(Board, ListOfPositions, [], PieceType, 0, MaxValue),
 	Value = MaxValue.
+
+%pieceValue(+GameState, +PieceRow, +PieceColumn, -Value)
+pieceValue([_|Board], PieceRow, PieceColumn, Value) :-
+	getPiece(Board, PieceRow, PieceColumn, PieceType),
+	getGroup(Board, PieceRow, PieceColumn, PieceType, [], _, Value).
 
 %choose_move(+GameState, +Player, +Level, -Move)
 %choose_move(GameState, Player, Level, Move).
