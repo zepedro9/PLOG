@@ -36,8 +36,8 @@ doRound(GameState):-
 %TODO criar caso de desempate
 %check for the winner
 checkWinner(GameState, Winner):-
-	value(GameState, Player1, Val1),
-	value(GameState, Player2, Val2),
+	value(GameState, 1, Val1),
+	value(GameState, 2, Val2),
 		Val1 @< Val2,
 		Winner = 'Player1';
         Val2 @< Val1,
