@@ -32,17 +32,17 @@ valid_moves([_|Board], Player, ListOfMoves) :-
 	getPieceType(Player, PieceType),
 	valid_movesAux(Board, 9, ListOfPositions, PieceType, [], ListOfMoves).
 
-valid_movesAux([], [], 0, PlaceHolderList, ListOfMoves) :-
+valid_movesAux([], _, [], _, PlaceHolderList, ListOfMoves) :-
 	ListOfMoves = PlaceHolderList.
 valid_movesAux([[CurrentPiece|_]|RestOfRows], 0, [[PositionRow|[PositionColumn|_]]|TailListOfPositions], PieceType, PlaceHolderList, ListOfMoves) :-
 	CurrentPiece == PieceType,
-	append([PositionRow, PositionColumn], PlaceHolderList, Aux),
-	valid_movesAux(RestOfRows, Counter, TailListOfPositions, PieceType, Aux, ListOfMoves);
-	valid_movesAux(RestOfRows, Counter, TailListOfPositions, PieceType, PlaceHolderList, ListOfMoves).
+	append([[PositionRow, PositionColumn]], PlaceHolderList, Aux),
+	valid_movesAux(RestOfRows, 9, TailListOfPositions, PieceType, Aux, ListOfMoves);
+	valid_movesAux(RestOfRows, 9, TailListOfPositions, PieceType, PlaceHolderList, ListOfMoves).
 valid_movesAux([[CurrentPiece|RestOfColumns]|RestOfRows], BoardCounter, [[PositionRow|[PositionColumn|_]]|TailListOfPositions], PieceType, PlaceHolderList, ListOfMoves) :-
 	CurrentPiece == PieceType,
 	Counter is BoardCounter - 1,
-	append([PositionRow, PositionColumn], PlaceHolderList, Aux),
+	append([[PositionRow, PositionColumn]], PlaceHolderList, Aux),
 	valid_movesAux([RestOfColumns|RestOfRows], Counter, TailListOfPositions, PieceType, Aux, ListOfMoves);
 	Counter is BoardCounter - 1,
 	valid_movesAux([RestOfColumns|RestOfRows], Counter, TailListOfPositions, PieceType, PlaceHolderList, ListOfMoves).
