@@ -187,7 +187,7 @@ mainMenu :-
   Caso o input seja um valor inválido, é mostrado ao jogador uma mensagem de erro e é pedido outro input. 
 
 ### Jogadas Válidas
-A obtenção das jogadas válidas para o estado de jogo atual, foi implementado o predicado ```python valid_moves([_|Board], Player, ListOfMoves)```, que dado um estado de jogo e um jogador, vai percorrer o tabuleiro e vai fazer uma lista de todas as posições que contém uma peça, da cor do jogador, que ainda tem jogadas legais possíveis.
+A obtenção das jogadas válidas para o estado de jogo atual, foi implementado o predicado ``` valid_moves([_|Board], Player, ListOfMoves)```, que dado um estado de jogo e um jogador, vai percorrer o tabuleiro e vai fazer uma lista de todas as posições que contém uma peça, da cor do jogador, que ainda tem jogadas legais possíveis.
 
   ```python
 valid_moves([_|Board], Player, ListOfMoves) :-
@@ -199,12 +199,12 @@ valid_moves([_|Board], Player, ListOfMoves) :-
 
 <!-- finalizar  -->
 ### Execução de Movimentos
-Para realizar os movimentos, foi implementado o predicado ```python move(GameState, Move, NewGameState) ```
+Para realizar os movimentos, foi implementado o predicado ``` move(GameState, Move, NewGameState) ```
 
 
 
 ### Computação dos Valores das Peças
-Para avaliar a pontuação de cada jogador, é usado o predicado ```python value([_|Board], Player, Value)```
+Para avaliar a pontuação de cada jogador, é usado o predicado ``` value([_|Board], Player, Value)```
 
 ```python
 value([_|Board], Player, Value) :-
@@ -217,7 +217,7 @@ value([_|Board], Player, Value) :-
 Esse predicado irá iterar pelo tabuleiro em busco do maior grupo de peças de mesma cor, adicionado-as ao valor do bloco de peças ortogonalmente adjacentes.
 
 ### Final do Jogo
-O jogo termina quando não existe mais nenhuma jogada possível. Quando isso ocorre, o predicado ```python game_over(GameState, Winner) ``` chama um predicado ```python checkWinner(GameState, Winner) ```, que pega a pontuação do maior bloco de peças de cada jogador, chamando em seguida o predicado ```python getWinner(Val1, Val2, Winner)```, que irá realizar a comparação das pontuações dos jogadores. 
+O jogo termina quando não existe mais nenhuma jogada possível. Quando isso ocorre, o predicado ``` game_over(GameState, Winner) ``` chama um predicado ```checkWinner(GameState, Winner) ```, que pega a pontuação do maior bloco de peças de cada jogador, chamando em seguida o predicado ```getWinner(Val1, Val2, Winner)```, que irá realizar a comparação das pontuações dos jogadores. 
 
 ```python
 game_over(GameState, Winner):-
