@@ -1,33 +1,33 @@
+%mainMenu
 mainMenu :-
     printMainMenu,
     getMenuOption,
     read(Input),
     menuOption(Input).
 
+%menuOption(+Option)
 menuOption(1) :-
     startGame(1, 2),
     mainMenu.
-
 menuOption(2) :-
     startGame(1, -2),
     mainMenu.
-
 menuOption(3) :-
     startGame(-1, -2),
     mainMenu.
-
 menuOption(0) :-
-    write('\nGoodbye!\n\n').
-
+    write('\nGoodbye then.. (v_v)\n\n').
 menuOption(_Other) :-
     write('\n[ERROR]: That menu option is invalid!\n\n'),
     getMenuOption,
     read(Input),
     menuOption(Input).
-	
+
+%getMenuOption
 getMenuOption :-
     write('Choose an option: ').
 
+%printMainMenu
 printMainMenu :-
     nl,nl,
     write(' _________________________________________________________________________________________ '),nl,

@@ -1,3 +1,28 @@
+	
+%isHuman(+Player)
+isHuman(1).
+isHuman(2).
+
+%isBot(+Player)
+isBot(-1).
+isBot(-2).
+
+%getPieceType(+Player, -PieceType)
+getPieceType(Player, PieceType) :-
+	Aux is abs(Player),
+	Aux == 1,
+	PieceType = 'black';
+	Aux is abs(Player),
+	Aux == 2,
+	PieceType = 'white'.
+
+%getReversePieceType(+PieceType, -ReversePieceType)
+getReversePieceType(PieceType, ReversePieceType) :-
+	PieceType == 'white',
+	ReversePieceType = 'black';
+	PieceType == 'black',
+	ReversePieceType = 'white'.
+
 %positionsList(-PositionsList)
 positionsList([
 	[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9],
@@ -12,5 +37,5 @@ positionsList([
 	[9, 0], [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9]
 ]).
 
-%clear_screen
-clear_screen :- write('\e[2J').
+%clearScreen
+clearScreen :- write('\e[2J').
