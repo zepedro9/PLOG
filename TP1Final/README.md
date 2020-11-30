@@ -171,7 +171,7 @@ O tamanho do tabuleiro, segundo o jogo original, pode ser de qualquer tamanho. P
 
 
 ### Menu
- <img src="/TP1Intermediate/images/menu.png" alt="Menu">
+ <img src="/TP1Final/images/menu.png" alt="Menu">
 
  Para inicializar o jogo, é utilizado o predicado mainMenu, que por sua vez chama os restantes predicados 
 
