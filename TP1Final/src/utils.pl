@@ -7,6 +7,18 @@ isHuman(2).
 isBot(-1).
 isBot(-2).
 
+%getPiece(+Board, +Row, +Column, -Piece)
+getPiece([BoardLine | _], 0, Column, Piece):-
+	getPieceFromLine(BoardLine, Column, Piece).
+getPiece([_|BoardLines], Row, Column, Piece) :-
+	Aux is Row - 1,
+	getPiece(BoardLines, Aux, Column, Piece).
+%getPiece(+BoardLine, +Column, -Piece)
+getPieceFromLine([BoardPosition|_], 0, BoardPosition).
+getPieceFromLine([_|BoardPositions], Column, Piece) :-
+	Aux is Column - 1,
+	getPieceFromLine(BoardPositions, Aux, Piece).
+
 %getPieceType(+Player, -PieceType)
 getPieceType(Player, PieceType) :-
 	Aux is abs(Player),
