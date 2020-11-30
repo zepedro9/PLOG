@@ -164,8 +164,8 @@ Para a obtenção das jogadas válidas para o estado de jogo atual, foi implemen
 	getPieceType(Player, PieceType),
 	valid_movesAux(Board, Player, Board, 9, ListOfPositions, PieceType, [], ListOfMoves).
   ```
-
-Depois de obtida essa lista, e ser pedido ao jogador que selecione uma das peças que pode selecionar (que tem jogadas válidas), iremos então utilizar o predicado **validMovesOnPosition**, que dado o estado de jogo, a linha e coluna da peça selecionada, um indicador da fase em que a função se encontra e a cor da peça selecionada, vai devolver uma lista de todos os movimentos legais para essa peça.
+  
+  Depois de obtida essa lista, e ser pedido ao jogador que selecione uma das peças que pode selecionar (que tem jogadas válidas), iremos então utilizar o predicado **validMovesOnPosition**, que dado o estado de jogo, a linha e coluna da peça selecionada, um indicador da fase em que a função se encontra e a cor da peça selecionada, vai devolver uma lista de todos os movimentos legais para essa peça.
 
   ```prolog
 %validMovesOnPosition(+GameState, +Row, +Column, +PositionToCheck, +PieceType, +PlaceHolderList, -ListOfValidMoves)
@@ -341,6 +341,74 @@ validMovesOnPosition([Player|Board], Row, Column, 8, PieceType, PlaceHolderList,
 	validMovesOnPosition([Player|Board], Row, Column, 9, PieceType, Aux, ListOfValidMoves);
 	validMovesOnPosition([Player|Board], Row, Column, 9, PieceType, PlaceHolderList, ListOfValidMoves).
   ```
+  
+  #### Predicados extra utilizados em valid_moves e validMovesOnPosition
+  
+  * **positionsList** - Predicado chamado para criar uma lista de todas as posições do tabuleiro.
+  
+  ```prolog	
+	%positionsList(-PositionsList)
+	positionsList([
+		[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9],
+		[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9],
+		[2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [2, 8], [2, 9],
+		[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 8], [3, 9],
+		[4, 0], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [4, 7], [4, 8], [4, 9],
+		[5, 0], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5], [5, 6], [5, 7], [5, 8], [5, 9],
+		[6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 6], [6, 7], [6, 8], [6, 9],
+		[7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8], [7, 9],
+		[8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 6], [8, 7], [8, 8], [8, 9],
+		[9, 0], [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9]
+	]).
+  ```
+  
+  * **getReversePieceType** - Predicado que dado uma cor da peça, devolve a contrária.
+  
+  ```prolog	
+	%getReversePieceType(+PieceType, -ReversePieceType)
+	getReversePieceType(PieceType, ReversePieceType) :-
+		PieceType == 'white',
+		ReversePieceType = 'black';
+		PieceType == 'black',
+		ReversePieceType = 'white'.
+  ```  
+  
+  * **getPieceType** - Predicado chamado para saber qual a cor da peça do jogador.
+  
+  ```prolog	
+	%getPieceType(+Player, -PieceType)
+	getPieceType(Player, PieceType) :-
+		Aux is abs(Player),
+		Aux == 1,
+		PieceType = 'black';
+		Aux is abs(Player),
+		Aux == 2,
+		PieceType = 'white'.
+  ```  
+  
+  * **getPiece** - Predicado chamado para saber qual a cor de uma peça numa certa posição do tabuleiro.
+  
+  ```prolog	
+	%getPiece(+Board, +Row, +Column, -Piece)
+	getPiece([BoardLine | _], 0, Column, Piece):-
+		getPieceFromLine(BoardLine, Column, Piece).
+	getPiece([_|BoardLines], Row, Column, Piece) :-
+		Aux is Row - 1,
+		getPiece(BoardLines, Aux, Column, Piece).
+	%getPiece(+BoardLine, +Column, -Piece)
+	getPieceFromLine([BoardPosition|_], 0, BoardPosition).
+	getPieceFromLine([_|BoardPositions], Column, Piece) :-
+		Aux is Column - 1,
+		getPieceFromLine(BoardPositions, Aux, Piece).
+  ```
+  
+  * **createMove** - Predicado que dado um par de linhas e colunas de duas peças, vai devolver o movimento entre elas.
+  
+  ```prolog	
+	%createMove(+OldRow, +OldColumn, +NewRow, +NewColumn, -Move)
+	createMove(OldRow, OldColumn, NewRow, NewColumn, Move) :-
+		Move = [[OldRow, OldColumn], [NewRow, NewColumn]].
+  ```
 
 ### Execução de Movimentos
 Para realizar os movimentos, foi implementado o predicado **move**, que dado um estado de jogo e o movimento a executar, vai processar a informação e gerar um novo estado de jogo que vai conter o movimento concluído.
@@ -352,7 +420,25 @@ move([NextPlayer|Board], [[OldRow, OldColumn], [NewRow, NewColumn]], NewGameStat
 	changePiece(NewBoard1, NewRow, NewColumn, NewBoard2),
 	NewGameState = [NextPlayer|NewBoard2].
 ```
-
+  
+#### Predicados extra utilizados em move
+  
+  * **changePiece** - Predicado que dado um tabuleiro, uma linha e uma coluna, gera um novo tabuleiro em que a cor da peça nessa posição é invertida.
+  
+  ```prolog	
+	%changePiece(+Board, +Row, +Column, -NewBoard)
+	changePiece([], _, _, []).
+	changePiece([CurrentRow|RestOfRows], 0, Column, NewBoard) :-
+		NextRow is -1,
+		changePiece(RestOfRows, NextRow, Column, AuxBoard),
+		changePieceOnRow(CurrentRow, Column, NewRow),
+		append([NewRow], AuxBoard, NewBoard).
+	changePiece([CurrentRow|RestOfRows], Row, Column, NewBoard) :-
+		NextRow is Row - 1,
+		changePiece(RestOfRows, NextRow, Column, AuxBoard),
+		append([CurrentRow], AuxBoard, NewBoard).
+  ```
+  
 ### Final do Jogo
 O jogo termina quando não existe mais nenhuma jogada legal possível. Quando isso ocorre, o predicado **game_over** chama o predicado **checkWinner**, que pega na pontuação do maior bloco de peças de cada jogador, chamando em seguida o predicado **getWinner**, que irá realizar a comparação das pontuações dos jogadores e determinar o vencedor.
 
@@ -368,6 +454,28 @@ game_over([Player|Board], Winner) :-
 	Winner = 'none'.
 ``` 
 
+#### Predicados extra utilizados em game_over
+  
+  * **checkIfGameIsOver** - Predicado que dado um estado de jogo, retorna yes ou no dependendo se o jogo já terminou ou não.
+  
+  ```prolog	
+	%checkIfGameIsOver(+GameState)
+	checkIfGameIsOver([Player|Board]) :-
+		valid_moves([Player|Board], Player, ListOfMoves),!,
+		length(ListOfMoves, MovesAvaliable),
+		MovesAvaliable == 0.
+  ```
+  
+  * **checkWinner** - Predicado que dado um estado de jogo, devolve o jogador que ganhou o jogo, ou se foi empate.
+  
+  ```prolog	
+	%checkWinner(+GameState, -Winner)
+	checkWinner(GameState, Winner) :-
+		value(GameState, 1, Val1),
+		value(GameState, 2, Val2),
+		getWinner(Val1, Val2, Winner).
+  ```
+ 
 ### Computação dos Valores das Peças
 Para avaliar a pontuação de cada jogador num dado momento, é usado o predicado **value([_|Board], Player, Value)**, que dado um estado de jogo e o jogador em questão, devolve o valor do maior grupo de peças da sua cor existente no atual estado de jogo.
 
@@ -379,7 +487,7 @@ value([_|Board], Player, Value) :-
 	getLargestGroup(Board, ListOfPositions, [], PieceType, 0, MaxValue),
 	Value = MaxValue.
 ```
-
+  
 Para avaliar o valor de uma peça específica, foi criado o predicado **pieceValue**, que dado um estado de jogo, uma linha e uma coluna, e a cor da peça, devolve o valor dessa peça.
 
 ```prolog
@@ -442,6 +550,62 @@ pieceValue([_|_], PieceRow, PieceColumn, _, -1, Value) :-
 	Value = 0.5;
 	Value = 0.
 ```
+
+#### Predicados extra utilizados em value e pieceValue
+  
+  * **getLargestGroup** - Predicado chamado para saber qual o valor do maior grupo que um jogador tem num dado estado de jogo. Utiliza o predicado **getPiece** e **getGroup**.
+  
+  ```prolog	
+	%getLargestGroup(+Board, +ListOfPositions, +ListOfCheckedPositions, +PieceType, +ValuePlaceholder, -MaxValue)
+	getLargestGroup(_, [], _, _, ValuePlaceholder, MaxValue) :-
+		MaxValue is ValuePlaceholder.
+	getLargestGroup(Board, [[PositionRow|[PositionColumn|_]]|TailListOfPositions], ListOfCheckedPositions, PieceType, ValuePlaceholder, MaxValue) :-
+		ground(ValuePlaceholder),
+		\+ member([PositionRow|PositionColumn], ListOfCheckedPositions),
+		getPiece(Board, PositionRow, PositionColumn, Piece),
+		Piece == PieceType,
+		getGroup(Board, PositionRow, PositionColumn, PieceType, ListOfCheckedPositions, NewListOfCheckedPositions, GroupValue),!,
+		GroupValue > ValuePlaceholder ->
+		getLargestGroup(Board, TailListOfPositions, NewListOfCheckedPositions, PieceType, GroupValue, MaxValue);
+		getLargestGroup(Board, TailListOfPositions, ListOfCheckedPositions, PieceType, ValuePlaceholder, MaxValue).
+  ```
+  
+  * **getGroup** - Predicado chamado para saber qual o valor total de o grupo em que uma peça se encontra.
+  
+  ```prolog	
+	%getGroup(+Board, +PositionRow, +PositionColumn, +PieceType, +ListOfCheckedPositions, -NewListOfCheckedPositions, -GroupValue)
+	getGroup(Board,PositionRow, PositionColumn, PieceType, ListOfCheckedPositions, NewListOfCheckedPositions, GroupValue) :-
+		PositionRow >= 0,
+		PositionRow =< 9,
+		PositionColumn >= 0,
+		PositionColumn =< 9,
+		\+ member([PositionRow|PositionColumn], ListOfCheckedPositions),
+		append([[PositionRow|PositionColumn]], ListOfCheckedPositions, AuxList1),
+		getPiece(Board, PositionRow, PositionColumn, Piece),!,
+		Piece == PieceType ->
+		AuxTop is PositionRow-1,
+		AuxBottom is PositionRow+1,
+		AuxLeft is PositionColumn-1,
+		AuxRight is PositionColumn+1,
+		getGroup(Board, AuxTop, PositionColumn, PieceType, AuxList1, AuxList2, GroupValueTop),
+		getGroup(Board, AuxBottom, PositionColumn, PieceType, AuxList2, AuxList3, GroupValueBottom),
+		getGroup(Board, PositionRow, AuxLeft, PieceType, AuxList3, AuxList4, GroupValueLeft),
+		getGroup(Board, PositionRow, AuxRight, PieceType, AuxList4, NewListOfCheckedPositions, GroupValueRight),
+		GroupValue is 1 + GroupValueTop + GroupValueBottom + GroupValueLeft + GroupValueRight;
+		\+ ground(NewListOfCheckedPositions),
+		PositionRow >= 0,
+		PositionRow =< 9,
+		PositionColumn >= 0,
+		PositionColumn =< 9,
+		\+ member([PositionRow|PositionColumn], ListOfCheckedPositions),
+		append([[PositionRow|PositionColumn]], ListOfCheckedPositions, AuxList1),
+		NewListOfCheckedPositions = AuxList1,
+		GroupValue = 0;
+		\+ ground(NewListOfCheckedPositions),
+		NewListOfCheckedPositions = ListOfCheckedPositions,
+		GroupValue = 0;
+		GroupValue = 0.
+  ```
 
 ### Jogadas do Bot/Computador
 Para permitir ao computador de ser um ou ambos os players, foi necessária a criação do predicado **choose_move**, que recebendo o estado de jogo e o jogador que é, cria um movimento legal para a seguir ser executado.
