@@ -5,6 +5,12 @@ Carolina Rosemback Guilhermino - up201800171@fe.up.pt
 
 José Pedro Nogueira Rodrigues - up201708806@fe.up.pt
 
+## Instalação e Execução:
+* Instalar SICStus Prolog;
+* File > Consult > Selecionar o ficheiro 'emulsion.pl'
+* Inserir 'play.' para inicializar o jogo
+
+
 ## Descrição do Jogo:
 Emulsion é um jogo de território finito para 2 jogadores: Preto e Branco. O objetivo do jogo é obter um maior score na posição final. O score é calculado pelo tamanho de seu maior grupo de peças.
 Um grupo é formado por peças da mesma cor ortogonalmente adjacentes.
@@ -162,3 +168,74 @@ O tamanho do tabuleiro, segundo o jogo original, pode ser de qualquer tamanho. P
 |    Initial    |  Intermediate  |     Final     |
 |:-------------:|:--------------:|:-------------:|
 |![Initial Image](/TP1Intermediate/images/initial.png)|![Intermediate Image](/TP1Intermediate/images/intermediate.png)|![Final Image](/TP1Intermediate/images/final.png)|
+
+
+### Menu
+ <img src="/TP1Intermediate/images/menu.png" alt="Menu">
+
+ Para inicializar o jogo, é utilizado o predicado mainMenu, que por sua vez chama os restantes predicados 
+
+```python
+mainMenu :-
+    printMainMenu,
+    getMenuOption,
+    read(Input),
+    menuOption(Input).
+``` 
+  Nas opções de jogo, encontram-se: Humano Vs Humano, Humano Vs Maquina e Máquina Vs Máquina, que são dadas respectivamentes pelos numero, 1, 2 e 3, além da opção de saída. 
+  No menu, pede-se qual modo de jogo o jogador quer através de getMenuOption. O predicado menuOption efetua o tratamento do input, redirecionando o jogador para o modo selecionado. 
+  Caso o input seja um valor inválido, é mostrado ao jogador uma mensagem de erro e é pedido outro input. 
+
+### Jogadas Válidas
+A obtenção das jogadas válidas para o estado de jogo atual, foi implementado o predicado ```python valid_moves([_|Board], Player, ListOfMoves)```, que dado um estado de jogo e um jogador, vai percorrer o tabuleiro e vai fazer uma lista de todas as posições que contém uma peça, da cor do jogador, que ainda tem jogadas legais possíveis.
+
+  ```python
+valid_moves([_|Board], Player, ListOfMoves) :-
+	positionsList(ListOfPositions),
+	getPieceType(Player, PieceType),
+	valid_movesAux(Board, 9, ListOfPositions, PieceType, [], ListOfMoves).
+  ```
+
+
+<!-- finalizar  -->
+### Execução de Movimentos
+Para realizar os movimentos, foi implementado o predicado ```python move(GameState, Move, NewGameState) ```
+
+
+
+### Computação dos Valores das Peças
+Para avaliar a pontuação de cada jogador, é usado o predicado ```python value([_|Board], Player, Value)```
+
+```python
+value([_|Board], Player, Value) :-
+	positionsList(ListOfPositions),
+	getPieceType(Player, PieceType),
+	getLargestGroup(Board, ListOfPositions, [], PieceType, 0, MaxValue),
+	Value = MaxValue.
+```
+
+Esse predicado irá iterar pelo tabuleiro em busco do maior grupo de peças de mesma cor, adicionado-as ao valor do bloco de peças ortogonalmente adjacentes.
+
+### Final do Jogo
+O jogo termina quando não existe mais nenhuma jogada possível. Quando isso ocorre, o predicado ```python game_over(GameState, Winner) ``` chama um predicado ```python checkWinner(GameState, Winner) ```, que pega a pontuação do maior bloco de peças de cada jogador, chamando em seguida o predicado ```python getWinner(Val1, Val2, Winner)```, que irá realizar a comparação das pontuações dos jogadores. 
+
+```python
+game_over(GameState, Winner):-
+	write('Game Over!\n'),
+  checkWinner(GameState,Winner),
+	format('\n ~w is the winner!', Winner).
+``` 
+<!-- finalizar  -->
+### Modo Máquina Vs Máquina
+
+
+<!-- finalizar  -->
+### Conclusões 
+Ao longo do projeto, foram encontradas algumas dificuldades, nomeadamente, pensamento recursivo e a estruturação do código, funcionamento geral do jogo e escolhas a tomar em relação ao funcionamento dos predicados. Eventualmente, conseguimos superá-las.
+Em relação a melhorias, 
+
+
+### Bibliografia
+* Documentação do SICStus
+* Slides do Moodle
+* [Página oficial do jogo](https://boardgamegeek.com/boardgame/311851/emulsion)
