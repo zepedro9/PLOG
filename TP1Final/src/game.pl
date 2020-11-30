@@ -2,7 +2,7 @@
 startGame(Player1, Player2) :-
 	initial(InitialBoard),
 	gameState(Player1, InitialBoard, GameState),
-	printBoard(InitialBoard),
+	display_game(GameState, Player1),
 	doRound(GameState, Player1, Player2),!.
 
 %changeTurn(+GameState, +Player1, +Player2, -NewGameState)
@@ -35,7 +35,7 @@ processRound([NextPlayer|Board], Player1, Player2) :-
 	createMove(PieceRow, PieceColumn, NewPieceRow, NewPieceColumn, Move),
 	move([NextPlayer|Board], Move, [Player|NewGameBoard]),
 	changeTurn([Player|NewGameBoard], Player1, Player2, NewGameState),
-	printBoard(NewGameBoard),
+	display_game(NewGameState, NextPlayer),
 	doRound(NewGameState, Player1, Player2);
 	isBot(NextPlayer) ->
 	choose_move([NextPlayer|Board], NextPlayer, _, Move),
@@ -43,7 +43,7 @@ processRound([NextPlayer|Board], Player1, Player2) :-
 	changeTurn([Player|NewGameBoard], Player1, Player2, NewGameState),
 	Computer is abs(Player),
 	format('~nComputer ~w\'s move:~n', [Computer]),%'
-	printBoard(NewGameBoard),
+	display_game(NewGameState, NextPlayer),
 	doRound(NewGameState, Player1, Player2).
 
 %endGame

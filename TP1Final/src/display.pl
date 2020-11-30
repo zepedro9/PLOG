@@ -16,6 +16,10 @@ initial([
 pieceRep(black, P) :- P='| B '.
 pieceRep(white, P) :- P='|   '.
 
+%display_game(+GameState, +CurrentPlayer)
+display_game([_|Board], _) :-
+	printBoard(Board).
+
 %printBoard(+Board)
 printBoard(Board) :-
 	printPreBoard,
@@ -40,17 +44,17 @@ printActualBoard([FirstLine|Rest], N) :-
 	write(N),
 	write(' '),
 	N1 is N + 1,
-	print_line(FirstLine),
+	printLine(FirstLine),
 	nl,
 	printActualBoard(Rest, N1).
 
-%print_line(+BoardLine)	
-print_line([]) :-
+%printLine(+BoardLine)	
+printLine([]) :-
 	write('|').
-print_line([FirstSpot|Rest]) :-
+printLine([FirstSpot|Rest]) :-
 	pieceRep(FirstSpot, L),
 	write(L),
-	print_line(Rest).
+	printLine(Rest).
 
 %getPiece(+Board, +Row, +Column, -Piece)
 getPiece([BoardLine | _], 0, Column, Piece):-
