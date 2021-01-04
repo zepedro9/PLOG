@@ -26,6 +26,97 @@ dominosweeper(Board) :-
 
 
 getNeighbours(BoardList, Indice, NumRows, NumCols, Neighbours) :-
+	Indice =:= 0,
+	MidRightI is Indice + 1,
+	BottomMidI is Indice + NumCols,
+	BottomRightI is Indice + NumCols + 1,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, MidRightI, Max, [], Neighbours1),
+	getNeighbour(BoardList, BottomMidI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, BottomRightI, Max, Neighbours2, Neighbours);
+	
+	Indice =:= NumCols - 1,
+	MidLeftI is Indice - 1,
+	BottomLeftI is Indice + NumCols - 1,
+	BottomMidI is Indice + NumCols,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, MidLeftI, Max, [], Neighbours1),
+	getNeighbour(BoardList, BottomLeftI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, BottomMidI, Max, Neighbours2, Neighbours);
+	
+	Indice =:= NumCols * (NumRows - 1),
+	TopMidI is Indice - NumCols,
+	TopRightI is Indice - NumCols + 1,
+	MidRightI is Indice + 1,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, TopMidI, Max, [], Neighbours1),
+	getNeighbour(BoardList, TopRightI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, MidRightI, Max, Neighbours2, Neighbours);
+	
+	Indice =:= NumCols * NumRows - 1,
+	TopLeftI is Indice - NumCols - 1,
+	TopMidI is Indice - NumCols,
+	MidLeftI is Indice - 1,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
+	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, MidLeftI, Max, Neighbours2, Neighbours);
+	
+	isBetween(0, NumCols, Indice),
+	MidLeftI is Indice - 1,
+	MidRightI is Indice + 1,
+	BottomLeftI is Indice + NumCols - 1,
+	BottomMidI is Indice + NumCols,
+	BottomRightI is Indice + NumCols + 1,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, MidLeftI, Max, [], Neighbours1),
+	getNeighbour(BoardList, MidRightI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, BottomLeftI, Max, Neighbours2, Neighbours3),
+	getNeighbour(BoardList, BottomMidI, Max, Neighbours3, Neighbours4),
+	getNeighbour(BoardList, BottomRightI, Max, Neighbours4, Neighbours);
+	
+	Indice mod NumRows =:= 0,
+	TopMidI is Indice - NumCols,
+	TopRightI is Indice - NumCols + 1,
+	MidRightI is Indice + 1,
+	BottomMidI is Indice + NumCols,
+	BottomRightI is Indice + NumCols + 1,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, TopMidI, Max, [], Neighbours1),
+	getNeighbour(BoardList, TopRightI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, MidRightI, Max, Neighbours2, Neighbours3),
+	getNeighbour(BoardList, BottomMidI, Max, Neighbours3, Neighbours4),
+	getNeighbour(BoardList, BottomRightI, Max, Neighbours4, Neighbours);
+	
+	Aux2 is NumCols * (NumRows - 1) ,
+	Aux3 is NumCols * NumRows - 1,
+	isBetween(Aux2, Aux3, Indice),
+	TopLeftI is Indice - NumCols - 1,
+	TopMidI is Indice - NumCols,
+	TopRightI is Indice - NumCols + 1,
+	MidLeftI is Indice - 1,
+	MidRightI is Indice + 1,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
+	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, TopRightI, Max, Neighbours2, Neighbours3),
+	getNeighbour(BoardList, MidLeftI, Max, Neighbours3, Neighbours4),
+	getNeighbour(BoardList, MidRightI, Max, Neighbours4, Neighbours);
+	
+	Aux4 is Indice + 1,
+	Aux4 mod NumRows =:= 0,
+	TopLeftI is Indice - NumCols - 1,
+	TopMidI is Indice - NumCols,
+	MidLeftI is Indice - 1,
+	BottomLeftI is Indice + NumCols - 1,
+	BottomMidI is Indice + NumCols,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
+	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, MidLeftI, Max, Neighbours2, Neighbours3),
+	getNeighbour(BoardList, BottomLeftI, Max, Neighbours3, Neighbours4),
+	getNeighbour(BoardList, BottomMidI, Max, Neighbours4, Neighbours);
+	
 	TopLeftI is Indice - NumCols - 1,
 	TopMidI is Indice - NumCols,
 	TopRightI is Indice - NumCols + 1,
@@ -65,6 +156,9 @@ getElement([H|_], 0, H).
 getElement([_|T], Indice, Value) :-
 	Aux is Indice - 1,
 	getElement(T, Aux, Value).
+
+isBetween(Min, Max, Value) :-
+	(Value #>= Min) #/\ (Value #=< Max).
 
 exampleProblem([
 	[2, _, _, _, _, _],
