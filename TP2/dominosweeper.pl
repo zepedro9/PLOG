@@ -2,16 +2,7 @@
 :- use_module(library(lists)).
 :- use_module(library(random)).
 
-% Tabuleiro 6vs6
-% A1, A2, A3, A4, A5, A6
-% B1, B2, B3, B4, B5, B6
-% C1, C2, C3, C4, C5, C6
-% D1, D2, D3, D4, D5, D6
-% E1, E2, E3, E4, E5, E6
-% F1, F2, F3, F4, F5, F6
-
 % Cell values:
-% -2 = No Information
 % -1 = Mine
 % 0 = 0
 % 1 = 1
@@ -21,40 +12,65 @@
 %
 % Obs: With the given restrictions, a higher value than 4 in any cell is impossible.
 
-dominosweeper(N, List) :-
-	matrixN(N, List, Rows, Columns),
-	domain(List, -1, 4).
-	
-	
-	% Each mine is adjacent to exactly one other mine -v
-	
-	% Each mine is adjacent to exactly one other mine -^
-	
-	% Each cell with a number is adjacent to exactly that number of mines among the cells touching it -v
-	
-	% Each cell with a number is adjacent to exactly that number of mines among the cells touching it -
-
-%matrixN(+N, -List, -Rows, -Columns)
-matrixN(N, List, Rows, Columns) :-
-	length(Rows, N), 
-	maplist(same_length(Rows), Rows),
-	append(Rows, List),
-	transpose(Rows, Columns).
+dominosweeper(Board) :-
    
-example_problem([
-	[2, -2, -2, -2, -2, -2],
-	[-2, -2, -2, -2, -2, -2],
-	[-2, -2, -2, 3, -2, 3],
-	[2, -2, 0, -2, -2, -2],
-	[-2, -2, -2, -2, -2, -2],
-	[-2, -2, -2, -2, -2, 1]
-]).
+	% dimensions of the board
+	length(Board, NumRows),
+	transpose(Board, BoardT),
+	length(BoardT, NumCols),
+	flattenMatrix(Board, BoardList).
+	
 
-tester([
-	['A1', 'A2', 'A3', 'A4', 'A5', 'A6'],
-	['B1', 'B2', 'B3', 'B4', 'B5', 'B6'],
-	['C1', 'C2', 'C3', 'C4', 'C5', 'C6'],
-	['D1', 'D2', 'D3', 'D4', 'D5', 'D6'],
-	['E1', 'E2', 'E3', 'E4', 'E5', 'E6'],
-	['F1', 'F2', 'F3', 'F4', 'F5', 'F6']
+
+
+
+
+getNeighbours(BoardList, Indice, NumRows, NumCols, Neighbours) :-
+	TopLeftI is Indice - NumCols - 1,
+	TopMidI is Indice - NumCols,
+	TopRightI is Indice - NumCols + 1,
+	MidLeftI is Indice - 1,
+	MidRightI is Indice + 1,
+	BottomLeftI is Indice + NumCols - 1,
+	BottomMidI is Indice + NumCols,
+	BottomRightI is Indice + NumCols + 1,
+	Max is NumCols * NumRows - 1,
+	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
+	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
+	getNeighbour(BoardList, TopRightI, Max, Neighbours2, Neighbours3),
+	getNeighbour(BoardList, MidLeftI, Max, Neighbours3, Neighbours4),
+	getNeighbour(BoardList, MidRightI, Max, Neighbours4, Neighbours5),
+	getNeighbour(BoardList, BottomLeftI, Max, Neighbours5, Neighbours6),
+	getNeighbour(BoardList, BottomMidI, Max, Neighbours6, Neighbours7),
+	getNeighbour(BoardList, BottomRightI, Max, Neighbours7, Neighbours).
+
+getNeighbour(BoardList, Indice, Max, OldList, NewList) :-
+	Indice < 0,
+	NewList = OldList;
+	Indice > Max,
+	NewList = OldList;
+	getElement(BoardList, Indice, Value),
+	append(OldList, [Value], NewList).
+
+flattenMatrix(List, ElementsList) :- 
+	reverse(List, [H|T]),
+	flattenMatrixAux(T, NewElementsList),
+	append(NewElementsList, H, ElementsList).
+	
+flattenMatrixAux([],[]).
+flattenMatrixAux([H|T], ElementsList) :- flattenMatrixAux(T, NewElementsList),
+	append(NewElementsList, H, ElementsList).
+
+getElement([H|_], 0, H).
+getElement([_|T], Indice, Value) :-
+	Aux is Indice - 1,
+	getElement(T, Aux, Value).
+
+exampleProblem([
+	[2, _, _, _, _, _],
+	[_, _, _, _, _, _],
+	[_, _, _, 3, _, 3],
+	[2, _, 0, _, _, _],
+	[_, _, _, _, _, _],
+	[_, _, _, _, _, 1]
 ]).
