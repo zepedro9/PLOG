@@ -75,7 +75,7 @@ applying_elements(Elements, List, Indice) :-
 	count(Mine, Elements, #=, Val).
 
 getNumbers([], _, _, List, FinalList) :- reverse(List, FinalList).
-getNumbers([H|T], BoardList, N, List, FinalList) :-
+getNumbers([_|T], BoardList, N, List, FinalList) :-
 	getElement(BoardList, N, Value),!,
 	number(Value) ->
 	append([N], List, NewList),
