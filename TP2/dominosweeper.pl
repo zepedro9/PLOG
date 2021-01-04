@@ -19,129 +19,6 @@ dominosweeper(Board) :-
 	transpose(Board, BoardT),
 	length(BoardT, NumCols),
 	flattenMatrix(Board, BoardList).
-	
-
-
-
-
-
-getNeighbours(BoardList, Indice, NumRows, NumCols, Neighbours) :-
-	Indice =:= 0,
-	MidRightI is Indice + 1,
-	BottomMidI is Indice + NumCols,
-	BottomRightI is Indice + NumCols + 1,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, MidRightI, Max, [], Neighbours1),
-	getNeighbour(BoardList, BottomMidI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, BottomRightI, Max, Neighbours2, Neighbours);
-	
-	Indice =:= NumCols - 1,
-	MidLeftI is Indice - 1,
-	BottomLeftI is Indice + NumCols - 1,
-	BottomMidI is Indice + NumCols,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, MidLeftI, Max, [], Neighbours1),
-	getNeighbour(BoardList, BottomLeftI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, BottomMidI, Max, Neighbours2, Neighbours);
-	
-	Indice =:= NumCols * (NumRows - 1),
-	TopMidI is Indice - NumCols,
-	TopRightI is Indice - NumCols + 1,
-	MidRightI is Indice + 1,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, TopMidI, Max, [], Neighbours1),
-	getNeighbour(BoardList, TopRightI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, MidRightI, Max, Neighbours2, Neighbours);
-	
-	Indice =:= NumCols * NumRows - 1,
-	TopLeftI is Indice - NumCols - 1,
-	TopMidI is Indice - NumCols,
-	MidLeftI is Indice - 1,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
-	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, MidLeftI, Max, Neighbours2, Neighbours);
-	
-	isBetween(0, NumCols, Indice),
-	MidLeftI is Indice - 1,
-	MidRightI is Indice + 1,
-	BottomLeftI is Indice + NumCols - 1,
-	BottomMidI is Indice + NumCols,
-	BottomRightI is Indice + NumCols + 1,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, MidLeftI, Max, [], Neighbours1),
-	getNeighbour(BoardList, MidRightI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, BottomLeftI, Max, Neighbours2, Neighbours3),
-	getNeighbour(BoardList, BottomMidI, Max, Neighbours3, Neighbours4),
-	getNeighbour(BoardList, BottomRightI, Max, Neighbours4, Neighbours);
-	
-	Indice mod NumRows =:= 0,
-	TopMidI is Indice - NumCols,
-	TopRightI is Indice - NumCols + 1,
-	MidRightI is Indice + 1,
-	BottomMidI is Indice + NumCols,
-	BottomRightI is Indice + NumCols + 1,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, TopMidI, Max, [], Neighbours1),
-	getNeighbour(BoardList, TopRightI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, MidRightI, Max, Neighbours2, Neighbours3),
-	getNeighbour(BoardList, BottomMidI, Max, Neighbours3, Neighbours4),
-	getNeighbour(BoardList, BottomRightI, Max, Neighbours4, Neighbours);
-	
-	Aux2 is NumCols * (NumRows - 1) ,
-	Aux3 is NumCols * NumRows - 1,
-	isBetween(Aux2, Aux3, Indice),
-	TopLeftI is Indice - NumCols - 1,
-	TopMidI is Indice - NumCols,
-	TopRightI is Indice - NumCols + 1,
-	MidLeftI is Indice - 1,
-	MidRightI is Indice + 1,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
-	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, TopRightI, Max, Neighbours2, Neighbours3),
-	getNeighbour(BoardList, MidLeftI, Max, Neighbours3, Neighbours4),
-	getNeighbour(BoardList, MidRightI, Max, Neighbours4, Neighbours);
-	
-	Aux4 is Indice + 1,
-	Aux4 mod NumRows =:= 0,
-	TopLeftI is Indice - NumCols - 1,
-	TopMidI is Indice - NumCols,
-	MidLeftI is Indice - 1,
-	BottomLeftI is Indice + NumCols - 1,
-	BottomMidI is Indice + NumCols,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
-	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, MidLeftI, Max, Neighbours2, Neighbours3),
-	getNeighbour(BoardList, BottomLeftI, Max, Neighbours3, Neighbours4),
-	getNeighbour(BoardList, BottomMidI, Max, Neighbours4, Neighbours);
-	
-	TopLeftI is Indice - NumCols - 1,
-	TopMidI is Indice - NumCols,
-	TopRightI is Indice - NumCols + 1,
-	MidLeftI is Indice - 1,
-	MidRightI is Indice + 1,
-	BottomLeftI is Indice + NumCols - 1,
-	BottomMidI is Indice + NumCols,
-	BottomRightI is Indice + NumCols + 1,
-	Max is NumCols * NumRows - 1,
-	getNeighbour(BoardList, TopLeftI, Max, [], Neighbours1),
-	getNeighbour(BoardList, TopMidI, Max, Neighbours1, Neighbours2),
-	getNeighbour(BoardList, TopRightI, Max, Neighbours2, Neighbours3),
-	getNeighbour(BoardList, MidLeftI, Max, Neighbours3, Neighbours4),
-	getNeighbour(BoardList, MidRightI, Max, Neighbours4, Neighbours5),
-	getNeighbour(BoardList, BottomLeftI, Max, Neighbours5, Neighbours6),
-	getNeighbour(BoardList, BottomMidI, Max, Neighbours6, Neighbours7),
-	getNeighbour(BoardList, BottomRightI, Max, Neighbours7, Neighbours).
-
-getNeighbour(BoardList, Indice, Max, OldList, NewList) :-
-	Indice < 0,
-	NewList = OldList;
-	Indice > Max,
-	NewList = OldList;
-	getElement(BoardList, Indice, Value),
-	append(OldList, [Value], NewList).
 
 flattenMatrix(List, ElementsList) :- 
 	reverse(List, [H|T]),
@@ -159,16 +36,6 @@ getElement([_|T], Indice, Value) :-
 
 isBetween(Min, Max, Value) :-
 	(Value #>= Min) #/\ (Value #=< Max).
-
-exampleProblem([
-	[2, _, _, _, _, _],
-	[_, _, _, _, _, _],
-	[_, _, _, 3, _, 3],
-	[2, _, 0, _, _, _],
-	[_, _, _, _, _, _],
-	[_, _, _, _, _, 1]
-]).
-
 
 in_bounds(I,J,Size):-
     I #>= 0,
@@ -204,7 +71,24 @@ getMine(Indice, List, List2, Size) :-
 	findall(A, (member(H, Result), getElement(List, H, A)), Elements).
 
 applying_elements(Elements, List, Indice) :-
-	 nth0(Indice, List, Val),
-	 count(Mine, Elements, #=, Val).
+	nth0(Indice, List, Val),
+	count(Mine, Elements, #=, Val).
 
-
+getNumbers([], _, _, List, FinalList) :- reverse(List, FinalList).
+getNumbers([H|T], BoardList, N, List, FinalList) :-
+	getElement(BoardList, N, Value),!,
+	number(Value) ->
+	append([N], List, NewList),
+	NewN is N + 1,
+	getNumbers(T, BoardList, NewN, NewList, FinalList);
+	NewN is N + 1,
+	getNumbers(T, BoardList, NewN, List, FinalList).
+	
+exampleProblem([
+	[2, _, _, _, _, _],
+	[_, _, _, _, _, _],
+	[_, _, _, 3, _, 3],
+	[2, _, 0, _, _, _],
+	[_, _, _, _, _, _],
+	[_, _, _, _, _, 1]
+]).
