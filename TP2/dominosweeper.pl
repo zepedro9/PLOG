@@ -64,7 +64,7 @@ adjacent(I,J,I1,J1):-
 find_adjacent(Indice, L1, Size, L2, Result) :-
 	decompose(Size,Indice,Res),
     Res=W-Z,
-    findall(Pos,(adjacent(W,Z,I,J),in_bounds(I,J,Size), Pos #= I*Size+J, nth0(Pos, L1, H), \+member(Pos,L2)),Result).
+    findall(Pos,(adjacent(W,Z,I,J),in_bounds(I,J,Size), Pos #= I*Size+J, nth0(Pos, L1, H), \+member(Pos, getNumbers(L1, L1, 0, [], Numbers))),Result).
 
 getMine(Indice, List, List2, Size) :-
 	find_adjacent(Indice, List, Size, List2, Result),
