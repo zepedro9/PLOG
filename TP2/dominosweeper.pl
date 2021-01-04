@@ -12,7 +12,8 @@
 %
 % Obs: With the given restrictions, a higher value than 4 in any cell is impossible.
 
-dominosweeper(Board) :-
+dominosweeper(1) :-
+   exampleProblem(Board),
    
 	% dimensions of the board
 	length(Board, NumRows),
