@@ -16,9 +16,15 @@ dominosweeper(Board) :-
    
 	% dimensions of the board
 	length(Board, NumRows),
-	transpose(Board, BoardT),
-	length(BoardT, NumCols),
-	flattenMatrix(Board, BoardList).
+	flattenMatrix(Board, BoardList),
+	loopBoard(BoardList, BoardList, NumRows, 0).
+
+
+loopBoard([], _, _, _).
+loopBoard([_|T], Board, Size, Indice) :-
+	getMine(Indice, Board, Size),
+	Next is Indice + 1,
+	loopBoard(T, Board, Size, Next).
 
 flattenMatrix(List, ElementsList) :- 
 	reverse(List, [H|T]),
@@ -61,18 +67,18 @@ adjacent(I,J,I1,J1):-
     1 #= abs(J-J1).
 
 
-find_adjacent(Indice, L1, Size, L2, Result) :-
+find_adjacent(Indice, L1, Size, Result) :-
 	decompose(Size,Indice,Res),
     Res=W-Z,
-    findall(Pos,(adjacent(W,Z,I,J),in_bounds(I,J,Size), Pos #= I*Size+J, nth0(Pos, L1, H), \+member(Pos, getNumbers(L1, L1, 0, [], Numbers))),Result).
+    findall(Pos,(adjacent(W,Z,I,J),in_bounds(I,J,Size), Pos #= I*Size+J, nth0(Pos, L1, _), \+member(Pos, getNumbers(L1, L1, 0, [], _))),Result).
 
-getMine(Indice, List, List2, Size) :-
-	find_adjacent(Indice, List, Size, List2, Result),
-	findall(A, (member(H, Result), getElement(List, H, A)), Elements).
+getMine(Indice, List, Size) :-
+	find_adjacent(Indice, List, Size, Result),
+	findall(A, (member(H, Result), getElement(List, H, A)), _).
 
 applying_elements(Elements, List, Indice) :-
 	nth0(Indice, List, Val),
-	count(Mine, Elements, #=, Val).
+	count(_, Elements, #=, Val).
 
 getNumbers([], _, _, List, FinalList) :- reverse(List, FinalList).
 getNumbers([_|T], BoardList, N, List, FinalList) :-
