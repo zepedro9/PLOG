@@ -168,3 +168,43 @@ exampleProblem([
 	[_, _, _, _, _, _],
 	[_, _, _, _, _, 1]
 ]).
+
+
+in_bounds(I,J,Size):-
+    I #>= 0,
+    I #< Size,
+    J #>= 0,
+    J #< Size.
+
+decompose(Size,Pos,Res):-
+    Y is Size-1,
+    domain([I,J],0,Y),
+    Term #= I * Size + J,
+    Term #= Pos,
+    Res = I-J.
+
+adjacent(I1,J,I2,J) :-
+    1 #= abs(I1 - I2).
+
+adjacent(I,J1,I,J2) :-
+    1 #= abs(J1 - J2).
+
+adjacent(I,J,I1,J1):-
+    1 #= abs(I-I1),
+    1 #= abs(J-J1).
+
+
+find_adjacent(Indice, L1, Size, L2, Result) :-
+	decompose(Size,Indice,Res),
+    Res=W-Z,
+    findall(Pos,(adjacent(W,Z,I,J),in_bounds(I,J,Size), Pos #= I*Size+J, nth0(Pos, L1, H), \+member(Pos,L2)),Result).
+
+getMine(Indice, List, List2, Size) :-
+	find_adjacent(Indice, List, Size, List2, Result),
+	findall(A, (member(H, Result), getElement(List, H, A)), Elements).
+
+applying_elements(Elements, List, Indice) :-
+	 nth0(Indice, List, Val),
+	 count(Mine, Elements, #=, Val).
+
+
