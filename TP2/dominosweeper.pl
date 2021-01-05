@@ -12,19 +12,24 @@
 %
 % Obs: With the given restrictions, a higher value than 4 in any cell is impossible.
 
-dominosweeper(Board) :-
-   
-	% dimensions of the board
-	length(Board, NumRows),
-	flattenMatrix(Board, BoardList),
-	loopBoard(BoardList, BoardList, NumRows, 0).
+dominosweeper(BoardList) :-
 
+	length(BoardList,Z),
+    SizeT is sqrt(Z),
+    Size is truncate(SizeT),
+	findall(X,  (nth0(Y, BoardList, X), \+ground(X)), Result),
+	findall(X, (nth0(X, BoardList, Y), ground(Y)), Result2),
+	domain(BoardList, 0,7),
+	loopBoard(Result2, BoardList, Size),
+	labeling([], BoardList),
+	write(BoardList).
 
-loopBoard([], _, _, _).
-loopBoard([_|T], Board, Size, Indice) :-
+ 
+
+loopBoard([], _, _).
+loopBoard([Indice|T], Board, Size) :-
 	getMine(Indice, Board, Size),
-	Next is Indice + 1,
-	loopBoard(T, Board, Size, Next).
+	loopBoard(T, Board, Size).
 
 flattenMatrix(List, ElementsList) :- 
 	reverse(List, [H|T]),
@@ -70,15 +75,20 @@ adjacent(I,J,I1,J1):-
 find_adjacent(Indice, L1, Size, Result) :-
 	decompose(Size,Indice,Res),
     Res=W-Z,
-    findall(Pos,(adjacent(W,Z,I,J),in_bounds(I,J,Size), Pos #= I*Size+J, nth0(Pos, L1, _), \+member(Pos, getNumbers(L1, L1, 0, [], _))),Result).
+	getNumbers(L1, L1, 0, [], FinalList),
+    findall(Pos,(adjacent(W,Z,I,J),in_bounds(I,J,Size), Pos #= I*Size+J, nth0(Pos, L1, _), \+member(Pos,FinalList)),Result).
 
 getMine(Indice, List, Size) :-
 	find_adjacent(Indice, List, Size, Result),
-	findall(A, (member(H, Result), getElement(List, H, A)), _).
+	write(Result),
+	get_Values(List, Result, Elements), 
+	applying_elements(Elements, List, Indice),
+	write(Elements).
 
 applying_elements(Elements, List, Indice) :-
 	nth0(Indice, List, Val),
-	count(_, Elements, #=, Val).
+	Value is 7*Val,
+	sum(Elements, #= , Value).
 
 getNumbers([], _, _, List, FinalList) :- reverse(List, FinalList).
 getNumbers([_|T], BoardList, N, List, FinalList) :-
@@ -90,6 +100,17 @@ getNumbers([_|T], BoardList, N, List, FinalList) :-
 	NewN is N + 1,
 	getNumbers(T, BoardList, NewN, List, FinalList).
 	
+	
+ 
+exactly(_, [], 0).
+exactly(X, [Y|L], N) :-
+X #= Y #<=> B,
+N #= M + B,
+exactly(X, L, M).
+
+get_Values(Vars,[L],[T]):-nth0(L,Vars,T).
+get_Values(Vars,[H|T],Res):-nth0(H,Vars,K),get_Values(Vars,T,Res1),append([K],Res1,Res).
+
 exampleProblem([
 	[2, _, _, _, _, _],
 	[_, _, _, _, _, _],
@@ -98,3 +119,11 @@ exampleProblem([
 	[_, _, _, _, _, _],
 	[_, _, _, _, _, 1]
 ]).
+
+/* 
+[2,0,0,0,0,0,
+ 7,7,0,0,7,0,
+ 7,0,0,3,7,3,
+ 2,0,0,0,7,0,
+ 7,0,0,0,0,0,
+ 0,0,0,0,7,1] */
