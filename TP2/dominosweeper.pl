@@ -12,18 +12,23 @@
 %
 % Obs: With the given restrictions, a higher value than 4 in any cell is impossible.
 
-dominosweeper(BoardList) :-
-
+dominosweeper(1) :-
+	exampleProblem(P),
+	flattenMatrix(P, BoardList),
 	length(BoardList,Z),
     SizeT is sqrt(Z),
     Size is truncate(SizeT),
-	findall(X,  (nth0(Y, BoardList, X), \+ground(X)), Result),
 	findall(X, (nth0(X, BoardList, Y), ground(Y)), Result2),
 	domain(BoardList, 0,7),
 	loopBoard(Result2, BoardList, Size),
-	labeling([], BoardList).
-
+	labeling([], BoardList),
+	write(BoardList),
+	getMinesIndices(BoardList, Mines),
+	write(Mines).
  
+
+getMinesIndices(BoardList, Mines) :-
+    findall(Y,  (nth0(Y, BoardList, X), X =:= 7), Mines).
 
 loopBoard([], _, _).
 loopBoard([Indice|T], Board, Size) :-
