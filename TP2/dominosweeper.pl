@@ -21,8 +21,7 @@ dominosweeper(BoardList) :-
 	findall(X, (nth0(X, BoardList, Y), ground(Y)), Result2),
 	domain(BoardList, 0,7),
 	loopBoard(Result2, BoardList, Size),
-	labeling([], BoardList),
-	write(BoardList).
+	labeling([], BoardList).
 
  
 
@@ -80,7 +79,6 @@ find_adjacent(Indice, L1, Size, Result) :-
 
 getMine(Indice, List, Size) :-
 	find_adjacent(Indice, List, Size, Result),
-	write(Result),
 	get_Values(List, Result, Elements), 
 	applying_elements(Elements, List, Indice),
 	write(Elements).
