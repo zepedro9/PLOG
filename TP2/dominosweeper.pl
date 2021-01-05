@@ -22,13 +22,49 @@ dominosweeper(1) :-
 	domain(BoardList, 0,7),
 	loopBoard(Result2, BoardList, Size),
 	labeling([], BoardList),
-	write(BoardList),
 	getMinesIndices(BoardList, Mines),
-	write(Mines).
+	pairMines(BoardList, Mines, Z),
+	labeling([], BoardList),
+	printBoard(BoardList, 0, SizeT).
  
+ 
+printBoard(BoardList, N, SizeT) :-
+    write('\n['),
+	printBoardAux(BoardList, N, SizeT),
+    write(']\n\n').
+ 
+printBoardAux([], _, _).
+printBoardAux([H|T], N, S) :-
+	Aux is S-1,
+	N < Aux ->
+	write(H),
+    write(', '),
+	Next is N + 1,
+	printBoardAux(T, Next, S);
+	N < S ->
+	write(H),
+	Next is N + 1,
+	printBoardAux(T, Next, S);
+    write(']\n['),
+	write(H),
+    write(', '),
+	Next is N + 1,
+	printBoardAux(T, 1, S).
+	
+	
+
+pairMines(_, [], _).
+pairMines(BoardList, [H|T], Size) :-
+	Mine is 7,
+	find_adjacent(H, BoardList, Size, Result),
+	\+has_several(Result, Mine),
+	pairMines(BoardList, T, Size).
+	
+has_several(List, Value) :- 
+	select(Value, List, R), member(Value, R).
 
 getMinesIndices(BoardList, Mines) :-
-    findall(Y,  (nth0(Y, BoardList, X), X =:= 7), Mines).
+    findall(Y,  (nth0(Y, BoardList, X), X = 7), Mines).
 
 loopBoard([], _, _).
 loopBoard([Indice|T], Board, Size) :-
@@ -85,8 +121,7 @@ find_adjacent(Indice, L1, Size, Result) :-
 getMine(Indice, List, Size) :-
 	find_adjacent(Indice, List, Size, Result),
 	get_Values(List, Result, Elements), 
-	applying_elements(Elements, List, Indice),
-	write(Elements).
+	applying_elements(Elements, List, Indice).
 
 applying_elements(Elements, List, Indice) :-
 	nth0(Indice, List, Val),
@@ -122,6 +157,14 @@ exampleProblem([
 	[_, _, _, _, _, _],
 	[_, _, _, _, _, 1]
 ]).
+
+/* 
+[2,0,0,0,0,0,
+ 7,7,0,0,7,0,
+ 7,0,0,3,7,3,
+ 2,0,0,0,7,0,
+ 7,0,0,0,0,0,
+ 0,0,0,0,7,1] */
 
 /* 
 [2,0,0,0,0,0,
